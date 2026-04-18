@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Analysis Result</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-radius: 12px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .top-section {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .score-box {
+            width: 120px;
+            position: relative;
+        }
+        .score-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .cards {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .card {
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+        .card h3 {
+            margin-top: 0;
+            font-size: 16px;
+            padding-bottom: 5px;
+        }
+        .skills-found { background-color: #e0f7ea; border-left: 6px solid #4CAF50; }
+        .missing-skills { background-color: #ffe5e5; border-left: 6px solid #f44336; }
+        .suggestions { background-color: #e0f0ff; border-left: 6px solid #2196F3; }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 3px;
+            border-radius: 15px;
+            font-size: 13px;
+            color: #fff;
+        }
+        .found-badge { background-color: #4CAF50; }
+        .missing-badge { background-color: #f44336; }
+        .suggest-badge { background-color: #2196F3; }
+
+        .buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .buttons a {
+            text-decoration: none;
+            background-color: #ff9800;
+            color: #fff;
+            padding: 12px 25px;
+            margin: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .buttons a:hover {
+            background-color: #e68a00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Resume Analysis Result</h1>
+
+        <div class="top-section">
+            <!-- Small Circular Score -->
+            <div class="score-box">
+                <canvas id="scoreChart" width="120" height="120"></canvas>
+                <div class="score-text">{{ score }}%</div>
+            </div>
+
+            <!-- Cards -->
+            <div class="cards">
+                <div class="card skills-found">
+                    <h3>Skills Found</h3>
+                    {% for s in skills %}
+                        <span class="badge found-badge">{{ s }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="card missing-skills">
+                    <h3>Missing Skills</h3>
+                    {% for m in missing %}
+                        <span class="badge missing-badge">{{ m }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="card suggestions">
+                    <h3>Suggestions</h3>
+                    {% for s in suggestions %}
+                        <span class="badge suggest-badge">{{ s }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="buttons">
+            <a href="/">Analyze Another Resume</a>
+            <a href="/history">View Upload History</a>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('scoreChart').getContext('2d');
+        const scoreChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Score', 'Remaining'],
+                datasets: [{
+                    data: [{{ score }}, {{ 100 - score }}],
+                    backgroundColor: ['#4CAF50', '#e0e0e0'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                cutout: '70%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume History</title>
+</head>
+<body>
+<h1>Past Uploaded Resumes</h1>
+<table border="1">
+    <tr>
+        <th>Filename</th>
+        <th>Score</th>
+        <th>Skills</th>
+        <th>Missing Skills</th>
+        <th>Suggestions</th>
+        <th>Uploaded At</th>
+    </tr>
+    {% for resume in resumes %}
+    <tr>
+        <td>{{ resume.filename }}</td>
+        <td>{{ resume.score }}</td>
+        <td>{{ resume.skills }}</td>
+        <td>{{ resume.missing_skills }}</td>
+        <td>{{ resume.suggestions }}</td>
+        <td>{{ resume.uploaded_at }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
